@@ -128,14 +128,18 @@
 
   .game-time {
     font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1rem;
-    color: var(--accent);
+    color: var(--gold);
     letter-spacing: 0.02em;
   }
-  .game-time.muted { color: var(--muted); font-weight: 400; }
+  .game-time.muted {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--gold);
+  }
   .game-num { font-size: 0.75rem; color: var(--muted); text-align: center; }
-  .game-teams { font-size: 0.95rem; font-weight: 500; }
+  .game-teams { font-size: 0.95rem; font-weight: 400; }
   .game-result {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
@@ -538,7 +542,7 @@ function renderGames(containerId, games) {
                     (g.type === 'bronze' ? ' is-bronze' : '');
     row.onclick = () => openModal(g.id);
 
-    const timeEl = `<span class="game-time ${g.bold ? '' : 'muted'}">${g.time}</span>`;
+    const timeEl = `<span class="game-time">${g.time}</span>`;
     const numEl  = `<span class="game-num">${g.id}</span>`;
     const teamsEl = `<span class="game-teams">${g.home} <span style="color:var(--muted);font-weight:300">–</span> ${g.away}</span>`;
 
