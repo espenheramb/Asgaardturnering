@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sluttspill 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0d0f14;
+    --surface:  #161a22;
+    --card:     #1c2030;
+    --border:   #2a2f3d;
+    --accent:   #4fc3f7;
+    --accent2:  #f59e0b;
+    --text:     #e8eaf0;
+    --muted:    #6b7280;
+    --danger:   #ef4444;
+    --success:  #22c55e;
+    --gold:     #f59e0b;
+    --bronze:   #cd7c3a;
+    --radius:   8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .site-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  nav { display: flex; gap: 4px; }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+  nav button:hover { color: var(--text); background: var(--card); }
+  nav button.active { color: var(--accent); background: rgba(79,195,247,0.08); }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    margin-top: 2rem;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* ── SCHEDULE ── */
+  .schedule { display: flex; flex-direction: column; gap: 3px; }
+
+  .slot-group { display: flex; flex-direction: column; gap: 2px; }
+
+  .game-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-columns: 52px 24px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .game-row:hover { border-color: var(--accent); background: #1e2436; }
+  .game-row.has-result { border-left: 3px solid var(--success); }
+  .game-row.is-final   { border-left: 3px solid var(--gold); }
+  .game-row.is-bronze  { border-left: 3px solid var(--bronze); }
+
+  .game-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .game-time.muted { color: var(--muted); font-weight: 400; }
+  .game-num { font-size: 0.75rem; color: var(--muted); text-align: center; }
+  .game-teams { font-size: 0.95rem; font-weight: 500; }
+  .game-result {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-align: right;
+    white-space: nowrap;
+    min-width: 52px;
+  }
+  .game-result .so-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: 'Barlow', sans-serif;
+    color: var(--muted);
+    display: block;
+    text-align: right;
+  }
+  .game-result.empty { color: var(--muted); font-size: 0.8rem; font-family: 'Barlow', sans-serif; font-weight: 400; }
+
+  .resurface-row {
+    padding: 5px 14px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── TABLE VIEW ── */
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .standings-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: right;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .standings-table th:first-child,
+  .standings-table th:nth-child(2) { text-align: left; }
+  .standings-table td {
+    padding: 10px 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  .standings-table td:first-child { text-align: left; color: var(--muted); font-size: 0.8rem; font-weight: 600; width: 28px; }
+  .standings-table td:nth-child(2) { text-align: left; font-weight: 500; }
+  .standings-table tr:last-child td { border-bottom: none; }
+  .standings-table tbody tr { transition: background 0.1s; }
+  .standings-table tbody tr:hover { background: var(--card); }
+  .standings-table tbody tr.rank-1 td:nth-child(2) { color: var(--gold); }
+  .standings-table tbody tr.rank-2 td:nth-child(2) { color: #d1d5db; }
+  .standings-table tbody tr.rank-3 td:nth-child(2) { color: var(--bronze); }
+  .pos-badge { color: var(--muted); }
+  .pts { font-weight: 700; color: var(--accent); }
+  .diff-pos { color: var(--success); }
+  .diff-neg { color: var(--danger); }
+  .diff-zero { color: var(--muted); }
+
+  .table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    width: 100%;
+    max-width: 420px;
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+  }
+  .modal-match {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .score-row {
+    display: grid;
+    grid-template-columns: 1fr 64px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .score-label { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+  .score-input {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-align: center;
+    padding: 8px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .score-input:focus { border-color: var(--accent); }
+
+  .shootout-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .shootout-row input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; }
+
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 9px 20px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent); color: #0d0f14; }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-ghost { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
+  .btn-ghost:hover { color: var(--text); }
+  .btn-danger { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+  .btn-danger:hover { background: rgba(239,68,68,0.25); }
+
+  /* ── FORMAT ── */
+  .format-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .format-item {
+    padding: 10px 14px;
+    background: var(--surface);
+  }
+  .format-key {
+    font-size: 0.72rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .format-val { font-size: 0.9rem; font-weight: 500; }
+
+  /* ── LOADING ── */
+  .loading { color: var(--muted); font-size: 0.85rem; padding: 1rem 0; }
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--success);
+    color: #0d0f14;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 10px 20px;
+    border-radius: 999px;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 500px) {
+    .game-row { grid-template-columns: 46px 20px 1fr auto; gap: 8px; padding: 10px 10px; }
+    .format-grid { grid-template-columns: 1fr; }
+    main { padding: 1.5rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="site-title">🏒 Sluttspill 2025</span>
+    <nav>
+      <button class="active" onclick="showView('schedule')">Kamper</button>
+      <button onclick="showView('standings')">Tabell</button>
+      <button onclick="showView('format')">Format</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- SCHEDULE VIEW -->
+  <div id="view-schedule" class="view active">
+    <div class="section-label">Gruppespill</div>
+    <div class="schedule" id="schedule-group"></div>
+    <div class="section-label">Sluttspill — seeding etter tabell</div>
+    <div class="schedule" id="schedule-finals"></div>
+  </div>
+
+  <!-- STANDINGS VIEW -->
+  <div id="view-standings" class="view">
+    <div class="section-label">Tabell</div>
+    <div class="table-wrap">
+      <table class="standings-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Lag</th>
+            <th>K</th>
+            <th>V</th>
+            <th>U</th>
+            <th>T</th>
+            <th>MF</th>
+            <th>P</th>
+          </tr>
+        </thead>
+        <tbody id="standings-body">
+          <tr><td colspan="8" class="loading" style="text-align:center;padding:2rem;">Laster...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem;">K=kamper · V=vunnet · U=uavgjort · T=tapt · MF=målforskjell · P=poeng</p>
+  </div>
+
+  <!-- FORMAT VIEW -->
+  <div id="view-format" class="view">
+    <div class="section-label">Turneringsformat</div>
+    <div class="format-grid">
+      <div class="format-item"><div class="format-key">Gruppespill</div><div class="format-val">Full round robin, 10 kamper</div></div>
+      <div class="format-item"><div class="format-key">Kampvarighet</div><div class="format-val">1 × 20 min (løpende tid)</div></div>
+      <div class="format-item"><div class="format-key">Program</div><div class="format-val">2 kamper per time, fra hel time</div></div>
+      <div class="format-item"><div class="format-key">Islegging</div><div class="format-val">Mellom hver time (~15 min)</div></div>
+      <div class="format-item"><div class="format-key">Finaler</div><div class="format-val">Bronsefinale 19:00 · Gullfinale 20:00</div></div>
+      <div class="format-item"><div class="format-key">Uavgjort</div><div class="format-val">3 mot 3 i 3 min, deretter straffeslag</div></div>
+    </div>
+
+    <div class="section-label" style="margin-top:2rem;">Lag</div>
+    <div class="format-grid">
+      <div class="format-item"><div class="format-val">Sandefjord V2</div></div>
+      <div class="format-item"><div class="format-val">Rinken</div></div>
+      <div class="format-item"><div class="format-val">Torød Vikings</div></div>
+      <div class="format-item"><div class="format-val">Leftovers 1</div></div>
+      <div class="format-item"><div class="format-val">Leftovers 2</div></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Legg inn resultat</div>
+    <div class="modal-match" id="modal-match-name"></div>
+    <div class="score-row">
+      <span class="score-label" id="modal-home-label">Hjemmelag</span>
+      <input class="score-input" type="number" min="0" id="input-home" placeholder="0">
+    </div>
+    <div class="score-row">
+      <span class="score-label" id="modal-away-label">Bortelag</span>
+      <input class="score-input" type="number" min="0" id="input-away" placeholder="0">
+    </div>
+    <div class="shootout-row">
+      <input type="checkbox" id="input-shootout">
+      <label for="input-shootout">Avgjort på straffeslag</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="btn-clear" onclick="clearResult()">Slett</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Avbryt</button>
+      <button class="btn btn-primary" onclick="saveResult()">Lagre</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://hlpjraurpqaovtmrmjok.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_9KydNsRDi2E-rbmFqj2DUw_AxvuuQkp';
+
+const headers = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': `Bearer ${SUPABASE_KEY}`,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
+};
+
+// ── DATA ──
+const TEAMS = ['Sandefjord V2','Rinken','Torød Vikings','Leftovers 1','Leftovers 2'];
+
+const GAMES = [
+  { id:1,  time:'14:00', bold:true,  home:'Rinken',        away:'Torød Vikings',  resurface:false },
+  { id:2,  time:'14:20', bold:false, home:'Sandefjord V2', away:'Leftovers 2',    resurface:true  },
+  { id:3,  time:'15:00', bold:true,  home:'Rinken',        away:'Leftovers 1',    resurface:false },
+  { id:4,  time:'15:20', bold:false, home:'Torød Vikings', away:'Leftovers 2',    resurface:true  },
+  { id:5,  time:'16:00', bold:true,  home:'Sandefjord V2', away:'Leftovers 1',    resurface:false },
+  { id:6,  time:'16:20', bold:false, home:'Rinken',        away:'Leftovers 2',    resurface:true  },
+  { id:7,  time:'17:00', bold:true,  home:'Torød Vikings', away:'Leftovers 1',    resurface:false },
+  { id:8,  time:'17:20', bold:false, home:'Sandefjord V2', away:'Rinken',         resurface:true  },
+  { id:9,  time:'18:00', bold:true,  home:'Leftovers 1',   away:'Leftovers 2',    resurface:false },
+  { id:10, time:'18:20', bold:false, home:'Sandefjord V2', away:'Torød Vikings',  resurface:true  },
+];
+
+const FINALS = [
+  { id:11, time:'19:00', bold:true, home:'Bronsefinale', away:'3. og 4. plass', resurface:true,  type:'bronze' },
+  { id:12, time:'20:00', bold:true, home:'Gullfinale',   away:'1. og 2. plass', resurface:false, type:'gold'   },
+];
+
+let results = {};
+let currentGameId = null;
+
+// ── FETCH RESULTS ──
+async function fetchResults() {
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/results?select=*`, { headers });
+    const data = await r.json();
+    results = {};
+    data.forEach(d => results[d.game_id] = d);
+    renderSchedule();
+    renderStandings();
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+// ── RENDER SCHEDULE ──
+function renderSchedule() {
+  renderGames('schedule-group', GAMES);
+  renderGames('schedule-finals', FINALS);
+}
+
+function renderGames(containerId, games) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  games.forEach(g => {
+    const res = results[g.id];
+    const hasResult = res && res.home_score !== null;
+
+    const row = document.createElement('div');
+    row.className = 'game-row' + (hasResult ? ' has-result' : '') +
+                    (g.type === 'gold' ? ' is-final' : '') +
+                    (g.type === 'bronze' ? ' is-bronze' : '');
+    row.onclick = () => openModal(g.id);
+
+    const timeEl = `<span class="game-time ${g.bold ? '' : 'muted'}">${g.time}</span>`;
+    const numEl  = `<span class="game-num">${g.id}</span>`;
+    const teamsEl = `<span class="game-teams">${g.home} <span style="color:var(--muted);font-weight:300">–</span> ${g.away}</span>`;
+
+    let resultEl;
+    if (hasResult) {
+      const so = res.shootout ? '<span class="so-tag">straffeslag</span>' : '';
+      resultEl = `<span class="game-result">${res.home_score} – ${res.away_score}${so}</span>`;
+    } else {
+      resultEl = `<span class="game-result empty">legg til</span>`;
+    }
+
+    row.innerHTML = timeEl + numEl + teamsEl + resultEl;
+    el.appendChild(row);
+
+    if (g.resurface) {
+      const resRow = document.createElement('div');
+      resRow.className = 'resurface-row';
+      resRow.textContent = '↳ islegging (~15 min) + pause';
+      el.appendChild(resRow);
+    }
+  });
+}
+
+// ── RENDER STANDINGS ──
+function renderStandings() {
+  const stats = {};
+  TEAMS.forEach(t => stats[t] = { p:0, w:0, d:0, l:0, gf:0, ga:0 });
+
+  GAMES.forEach(g => {
+    const res = results[g.id];
+    if (!res || res.home_score === null) return;
+    const h = g.home, a = g.away;
+    if (!stats[h] || !stats[a]) return;
+    const hs = res.home_score, as_ = res.away_score;
+    stats[h].gf += hs; stats[h].ga += as_;
+    stats[a].gf += as_; stats[a].ga += hs;
+    stats[h].p++; stats[a].p++;
+
+    if (res.shootout) {
+      // Shootout: winner gets 2pts, loser gets 1pt
+      if (hs > as_) { stats[h].w++; stats[h].p += 1; stats[a].d++; stats[a].p += 1; }
+      else           { stats[a].w++; stats[a].p += 1; stats[h].d++; stats[h].p += 1; }
+    } else if (hs > as_) {
+      stats[h].w++; stats[h].p += 2;
+      stats[a].l++;
+    } else if (as_ > hs) {
+      stats[a].w++; stats[a].p += 2;
+      stats[h].l++;
+    } else {
+      stats[h].d++; stats[h].p += 1;
+      stats[a].d++; stats[a].p += 1;
+    }
+  });
+
+  const sorted = TEAMS.slice().sort((a,b) => {
+    const pa = stats[a], pb = stats[b];
+    if (pb.p !== pa.p) return pb.p - pa.p;
+    const da = pa.gf - pa.ga, db = pb.gf - pb.ga;
+    if (db !== da) return db - da;
+    return pb.gf - pa.gf;
+  });
+
+  const tbody = document.getElementById('standings-body');
+  tbody.innerHTML = '';
+  sorted.forEach((team, i) => {
+    const s = stats[team];
+    const diff = s.gf - s.ga;
+    const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
+    const diffClass = diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : 'diff-zero';
+    const tr = document.createElement('tr');
+    if (i === 0) tr.className = 'rank-1';
+    else if (i === 1) tr.className = 'rank-2';
+    else if (i === 2) tr.className = 'rank-3';
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td>${team}</td>
+      <td>${s.p}</td>
+      <td>${s.w}</td>
+      <td>${s.d}</td>
+      <td>${s.l}</td>
+      <td class="${diffClass}">${s.p > 0 ? diffStr : '–'}</td>
+      <td class="pts">${s.p > 0 ? (s.w*2 + s.d) : '0'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── MODAL ──
+function openModal(gameId) {
+  const allGames = [...GAMES, ...FINALS];
+  const g = allGames.find(x => x.id === gameId);
+  if (!g) return;
+  currentGameId = gameId;
+
+  document.getElementById('modal-match-name').textContent = `${g.home} – ${g.away}`;
+  document.getElementById('modal-home-label').textContent = g.home;
+  document.getElementById('modal-away-label').textContent = g.away;
+
+  const res = results[gameId];
+  document.getElementById('input-home').value = res?.home_score ?? '';
+  document.getElementById('input-away').value = res?.away_score ?? '';
+  document.getElementById('input-shootout').checked = res?.shootout ?? false;
+  document.getElementById('btn-clear').style.display = res ? 'block' : 'none';
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('input-home').focus();
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  currentGameId = null;
+}
+
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+async function saveResult() {
+  const home = parseInt(document.getElementById('input-home').value);
+  const away = parseInt(document.getElementById('input-away').value);
+  if (isNaN(home) || isNaN(away)) { showToast('Fyll inn begge resultater', true); return; }
+  const shootout = document.getElementById('input-shootout').checked;
+
+  const payload = { game_id: currentGameId, home_score: home, away_score: away, shootout, updated_at: new Date().toISOString() };
+
+  try {
+    const existing = results[currentGameId];
+    let r;
+    if (existing) {
+      r = await fetch(`${SUPABASE_URL}/rest/v1/results?game_id=eq.${currentGameId}`, {
+        method: 'PATCH', headers, body: JSON.stringify(payload)
+      });
+    } else {
+      r = await fetch(`${SUPABASE_URL}/rest/v1/results`, {
+        method: 'POST', headers, body: JSON.stringify(payload)
+      });
+    }
+    if (!r.ok) throw new Error(await r.text());
+    closeModal();
+    await fetchResults();
+    showToast('Resultat lagret ✓');
+  } catch(e) {
+    showToast('Feil: ' + e.message, true);
+  }
+}
+
+async function clearResult() {
+  if (!currentGameId) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/results?game_id=eq.${currentGameId}`, {
+      method: 'DELETE', headers
+    });
+    closeModal();
+    await fetchResults();
+    showToast('Resultat slettet');
+  } catch(e) {
+    showToast('Feil ved sletting', true);
+  }
+}
+
+// ── TOAST ──
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = isError ? 'var(--danger)' : 'var(--success)';
+  t.style.color = isError ? '#fff' : '#0d0f14';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── NAVIGATION ──
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`view-${name}`).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (name === 'standings') renderStandings();
+}
+
+// ── INIT ──
+fetchResults();
+setInterval(fetchResults, 30000);
+</script>
+</body>
+</html>
