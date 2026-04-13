@@ -275,11 +275,18 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 1rem 0 1.5rem;
+    margin: 1rem 0 0.75rem;
     font-size: 0.85rem;
     color: var(--muted);
   }
   .shootout-row input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; }
+  .winner-row { display: none; margin-bottom: 1.5rem; }
+  .winner-row.visible { display: block; }
+  .winner-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .winner-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .winner-btn { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); color: var(--muted); font-family: 'Barlow', sans-serif; font-size: 0.85rem; font-weight: 500; padding: 9px 12px; cursor: pointer; text-align: center; transition: all 0.15s; }
+  .winner-btn:hover { border-color: var(--accent); color: var(--text); }
+  .winner-btn.selected { background: rgba(79,195,247,0.12); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
   .btn {
@@ -440,8 +447,15 @@
       <input class="score-input" type="number" min="0" id="input-away" placeholder="0">
     </div>
     <div class="shootout-row">
-      <input type="checkbox" id="input-shootout">
+      <input type="checkbox" id="input-shootout" onchange="toggleShootoutWinner()">
       <label for="input-shootout">Avgjort på straffeslag</label>
+    </div>
+    <div class="winner-row" id="winner-row">
+      <div class="winner-label">Vinner på straffeslag</div>
+      <div class="winner-btns">
+        <button class="winner-btn" id="winner-home" onclick="selectWinner('home')"></button>
+        <button class="winner-btn" id="winner-away" onclick="selectWinner('away')"></button>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-danger" id="btn-clear" onclick="clearResult()">Slett</button>
@@ -548,7 +562,7 @@ function renderGames(containerId, games) {
 // ── RENDER STANDINGS ──
 function renderStandings() {
   const stats = {};
-  TEAMS.forEach(t => stats[t] = { p:0, w:0, d:0, l:0, gf:0, ga:0 });
+  TEAMS.forEach(t => stats[t] = { gp:0, w:0, d:0, l:0, gf:0, ga:0 });
 
   GAMES.forEach(g => {
     const res = results[g.id];
@@ -558,27 +572,56 @@ function renderStandings() {
     const hs = res.home_score, as_ = res.away_score;
     stats[h].gf += hs; stats[h].ga += as_;
     stats[a].gf += as_; stats[a].ga += hs;
-    stats[h].p++; stats[a].p++;
+    stats[h].gp++; stats[a].gp++;
 
     if (res.shootout) {
-      // Shootout: winner gets 2pts, loser gets 1pt
-      if (hs > as_) { stats[h].w++; stats[h].p += 1; stats[a].d++; stats[a].p += 1; }
-      else           { stats[a].w++; stats[a].p += 1; stats[h].d++; stats[h].p += 1; }
+      const winner = res.shootout_winner === 'home' ? h : a;
+      const loser  = res.shootout_winner === 'home' ? a : h;
+      stats[winner].w++;
+      stats[loser].l++;
     } else if (hs > as_) {
-      stats[h].w++; stats[h].p += 2;
-      stats[a].l++;
+      stats[h].w++; stats[a].l++;
     } else if (as_ > hs) {
-      stats[a].w++; stats[a].p += 2;
-      stats[h].l++;
+      stats[a].w++; stats[h].l++;
     } else {
-      stats[h].d++; stats[h].p += 1;
-      stats[a].d++; stats[a].p += 1;
+      stats[h].d++; stats[a].d++;
+    }
+  });
+
+  // Points: win=2, shootout win=2, shootout loss=1, draw=1, loss=0
+  TEAMS.forEach(t => {
+    const s = stats[t];
+    // Count shootout wins/losses separately via w+d+l vs gp
+    // w = regulation+shootout wins, d = regulation draws, l = regulation+shootout losses
+    // shootout games: w+l > gp - d when shootout happened
+    // Simpler: just use w*2 + d*1 but shootout losses get +1
+    // We track shootout losses as part of l, but they should get 1pt
+    // Re-derive: iterate games again for pts
+    s.pts = 0;
+  });
+  GAMES.forEach(g => {
+    const res = results[g.id];
+    if (!res || res.home_score === null) return;
+    const h = g.home, a = g.away;
+    if (!stats[h] || !stats[a]) return;
+    const hs = res.home_score, as_ = res.away_score;
+    if (res.shootout) {
+      const winner = res.shootout_winner === 'home' ? h : a;
+      const loser  = res.shootout_winner === 'home' ? a : h;
+      stats[winner].pts += 2;
+      stats[loser].pts  += 1;
+    } else if (hs > as_) {
+      stats[h].pts += 2;
+    } else if (as_ > hs) {
+      stats[a].pts += 2;
+    } else {
+      stats[h].pts += 1; stats[a].pts += 1;
     }
   });
 
   const sorted = TEAMS.slice().sort((a,b) => {
     const pa = stats[a], pb = stats[b];
-    if (pb.p !== pa.p) return pb.p - pa.p;
+    if (pb.pts !== pa.pts) return pb.pts - pa.pts;
     const da = pa.gf - pa.ga, db = pb.gf - pb.ga;
     if (db !== da) return db - da;
     return pb.gf - pa.gf;
@@ -598,18 +641,36 @@ function renderStandings() {
     tr.innerHTML = `
       <td>${i+1}</td>
       <td>${team}</td>
-      <td>${s.p}</td>
+      <td>${s.gp}</td>
       <td>${s.w}</td>
       <td>${s.d}</td>
       <td>${s.l}</td>
-      <td class="${diffClass}">${s.p > 0 ? diffStr : '–'}</td>
-      <td class="pts">${s.p > 0 ? (s.w*2 + s.d) : '0'}</td>
+      <td class="${diffClass}">${s.gp > 0 ? diffStr : '–'}</td>
+      <td class="pts">${s.pts}</td>
     `;
     tbody.appendChild(tr);
   });
 }
 
 // ── MODAL ──
+let shootoutWinner = null; // 'home' or 'away'
+
+function toggleShootoutWinner() {
+  const checked = document.getElementById('input-shootout').checked;
+  document.getElementById('winner-row').classList.toggle('visible', checked);
+  if (!checked) { shootoutWinner = null; updateWinnerBtns(); }
+}
+
+function selectWinner(side) {
+  shootoutWinner = side;
+  updateWinnerBtns();
+}
+
+function updateWinnerBtns() {
+  document.getElementById('winner-home').classList.toggle('selected', shootoutWinner === 'home');
+  document.getElementById('winner-away').classList.toggle('selected', shootoutWinner === 'away');
+}
+
 function openModal(gameId) {
   const allGames = [...GAMES, ...FINALS];
   const g = allGames.find(x => x.id === gameId);
@@ -619,11 +680,17 @@ function openModal(gameId) {
   document.getElementById('modal-match-name').textContent = `${g.home} – ${g.away}`;
   document.getElementById('modal-home-label').textContent = g.home;
   document.getElementById('modal-away-label').textContent = g.away;
+  document.getElementById('winner-home').textContent = g.home;
+  document.getElementById('winner-away').textContent = g.away;
 
   const res = results[gameId];
   document.getElementById('input-home').value = res?.home_score ?? '';
   document.getElementById('input-away').value = res?.away_score ?? '';
   document.getElementById('input-shootout').checked = res?.shootout ?? false;
+
+  shootoutWinner = res?.shootout_winner ?? null;
+  updateWinnerBtns();
+  document.getElementById('winner-row').classList.toggle('visible', !!res?.shootout);
   document.getElementById('btn-clear').style.display = res ? 'block' : 'none';
 
   document.getElementById('modal-overlay').classList.add('open');
@@ -644,8 +711,16 @@ async function saveResult() {
   const away = parseInt(document.getElementById('input-away').value);
   if (isNaN(home) || isNaN(away)) { showToast('Fyll inn begge resultater', true); return; }
   const shootout = document.getElementById('input-shootout').checked;
+  if (shootout && !shootoutWinner) { showToast('Velg hvem som vant på straffeslag', true); return; }
 
-  const payload = { game_id: currentGameId, home_score: home, away_score: away, shootout, updated_at: new Date().toISOString() };
+  const payload = {
+    game_id: currentGameId,
+    home_score: home,
+    away_score: away,
+    shootout,
+    shootout_winner: shootout ? shootoutWinner : null,
+    updated_at: new Date().toISOString()
+  };
 
   try {
     const existing = results[currentGameId];
