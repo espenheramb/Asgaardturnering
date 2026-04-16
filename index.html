@@ -647,11 +647,11 @@
     <div class="modal-match" id="modal-match-name"></div>
     <div class="score-row">
       <span class="score-label" id="modal-home-label">Hjemmelag</span>
-      <input class="score-input" type="number" min="0" id="input-home" placeholder="0">
+      <input class="score-input" type="number" min="0" max="99" inputmode="numeric" pattern="[0-9]*" id="input-home" placeholder="0">
     </div>
     <div class="score-row">
       <span class="score-label" id="modal-away-label">Bortelag</span>
-      <input class="score-input" type="number" min="0" id="input-away" placeholder="0">
+      <input class="score-input" type="number" min="0" max="99" inputmode="numeric" pattern="[0-9]*" id="input-away" placeholder="0">
     </div>
     <div class="shootout-row">
       <input type="checkbox" id="input-shootout" onchange="toggleShootoutWinner()">
@@ -914,8 +914,8 @@ function openModal(gameId) {
   document.getElementById('winner-away').textContent = g.away;
 
   const res = results[gameId];
-  document.getElementById('input-home').value = res?.home_score ?? '';
-  document.getElementById('input-away').value = res?.away_score ?? '';
+  document.getElementById('input-home').value = res?.home_score != null ? res.home_score : '';
+  document.getElementById('input-away').value = res?.away_score != null ? res.away_score : '';
   document.getElementById('input-shootout').checked = res?.shootout ?? false;
 
   shootoutWinner = res?.shootout_winner ?? null;
@@ -944,12 +944,12 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 });
 
 async function saveResult() {
-  const homeVal = document.getElementById('input-home').value;
-  const awayVal = document.getElementById('input-away').value;
+  const homeVal = document.getElementById('input-home').value.trim();
+  const awayVal = document.getElementById('input-away').value.trim();
   if (homeVal === '' || awayVal === '') { showToast('Fyll inn begge resultater', true); return; }
-  const home = parseInt(homeVal, 10);
-  const away = parseInt(awayVal, 10);
-  if (isNaN(home) || isNaN(away) || home < 0 || away < 0) { showToast('Ugyldig resultat', true); return; }
+  const home = Number(homeVal);
+  const away = Number(awayVal);
+  if (!Number.isFinite(home) || !Number.isFinite(away) || home < 0 || away < 0 || !Number.isInteger(home) || !Number.isInteger(away)) { showToast('Ugyldig resultat', true); return; }
   const shootout = document.getElementById('input-shootout').checked;
   if (shootout && !shootoutWinner) { showToast('Velg hvem som vant på straffeslag', true); return; }
 
