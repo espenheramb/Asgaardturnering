@@ -114,7 +114,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     display: grid;
-    grid-template-columns: 52px 24px 1fr auto;
+    grid-template-columns: 52px 24px 1fr auto auto;
     align-items: center;
     gap: 12px;
     padding: 10px 14px;
@@ -244,7 +244,7 @@
     font-size: 1.1rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--gold);
     margin-bottom: 0.25rem;
   }
   .modal-match {
@@ -341,7 +341,70 @@
   }
   .format-val { font-size: 0.9rem; font-weight: 500; }
 
-  /* ── LOADING ── */
+  .game-sec {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  .game-sec span { 
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--border);
+    margin-bottom: 1px;
+  }
+
+  /* ── RESET BUTTON ── */
+  .reset-area {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .reset-toggle {
+    background: none;
+    border: none;
+    color: var(--border);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    padding: 4px 8px;
+    transition: color 0.2s;
+  }
+  .reset-toggle:hover { color: var(--muted); }
+  .reset-confirm {
+    display: none;
+    margin-top: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .reset-confirm.visible { display: block; }
+  .reset-confirm p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
+  .reset-confirm input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 1rem;
+    text-align: center;
+    padding: 8px;
+    width: 100%;
+    outline: none;
+    margin-bottom: 10px;
+    letter-spacing: 0.2em;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .reset-confirm input:focus { border-color: var(--danger); }
   .loading { color: var(--muted); font-size: 0.85rem; padding: 1rem 0; }
   .toast {
     position: fixed;
@@ -361,12 +424,84 @@
   }
   .toast.show { opacity: 1; }
 
-  @media (max-width: 500px) {
-    .game-row { grid-template-columns: 46px 20px 1fr auto; gap: 8px; padding: 10px 10px; }
-    .format-grid { grid-template-columns: 1fr; }
-    main { padding: 1.5rem 1rem; }
+  /* ── MOBILE BOTTOM NAV ── */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+    padding: 0 0 env(safe-area-inset-bottom);
   }
-</style>
+  .bottom-nav-inner { display: flex; }
+  .bottom-nav button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 14px 8px;
+    cursor: pointer;
+    transition: color 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+  .bottom-nav button .nav-icon { font-size: 1.2rem; }
+  .bottom-nav button.active { color: var(--gold); }
+
+  /* ── TABLET (501–768px) ── */
+  @media (min-width: 501px) and (max-width: 768px) {
+    main { padding: 1.5rem 1rem; }
+    .game-sec { min-width: 60px; font-size: 0.68rem; }
+    .standings-table th, .standings-table td { padding: 8px 8px; }
+    .format-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── MOBILE (≤500px) ── */
+  @media (max-width: 500px) {
+    /* show bottom nav, hide top nav */
+    .bottom-nav { display: block; }
+    nav { display: none; }
+    main { padding: 1rem 0.75rem 5rem; }
+
+    .site-title { font-size: 1rem; }
+
+    .game-row {
+      grid-template-columns: 46px 20px 1fr auto;
+      gap: 8px;
+      padding: 10px 10px;
+    }
+    .game-sec { display: none; }
+    .game-teams { font-size: 0.88rem; }
+    .game-time { font-size: 0.9rem; }
+    .game-result { font-size: 1rem; min-width: 44px; }
+
+    .standings-table { font-size: 0.8rem; }
+    .standings-table th,
+    .standings-table td { padding: 8px 6px; }
+    .hide-mobile { display: none; }
+
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal {
+      border-radius: 16px 16px 0 0;
+      max-width: 100%;
+      padding: 1.5rem 1.25rem 2rem;
+    }
+
+    .score-input { font-size: 1.8rem; padding: 12px; }
+    .score-row { grid-template-columns: 1fr 76px; }
+    .winner-btn { padding: 12px; font-size: 0.9rem; }
+    .format-grid { grid-template-columns: 1fr; }
+    .modal-actions { gap: 8px; }
+    .btn { padding: 11px 16px; font-size: 0.85rem; }
+  }
 </head>
 <body>
 
@@ -374,9 +509,9 @@
   <div class="header-inner">
     <span class="site-title">🏒 Åsgaardturneringen — Sluttspill</span>
     <nav>
-      <button class="active" onclick="showView('schedule')">Kamper</button>
-      <button onclick="showView('standings')">Tabell</button>
-      <button onclick="showView('format')">Format</button>
+      <button class="active" onclick="showView('schedule', this)">Kamper</button>
+      <button onclick="showView('standings', this)">Tabell</button>
+      <button onclick="showView('format', this)">Format</button>
     </nav>
   </div>
 </header>
@@ -400,9 +535,9 @@
           <tr>
             <th>#</th>
             <th>Lag</th>
-            <th>K</th>
+            <th class="hide-mobile">K</th>
             <th>V</th>
-            <th>U</th>
+            <th class="hide-mobile">U</th>
             <th>T</th>
             <th>MF</th>
             <th>P</th>
@@ -413,7 +548,7 @@
         </tbody>
       </table>
     </div>
-    <p style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem;">K=kamper · V=vunnet · U=uavgjort · T=tapt · MF=målforskjell · P=poeng</p>
+    <p style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem;">K=kamper · V=vunnet · U=uavgjort · T=tapt · MF=målforskjell · P=poeng<br><span class="hide-mobile" style="display:inline"> </span><span style="display:none" class="show-mobile">K og U skjult på mobil</span></p>
   </div>
 
   <!-- FORMAT VIEW -->
@@ -435,6 +570,15 @@
       <div class="format-item"><div class="format-val">Torød Vikings</div></div>
       <div class="format-item"><div class="format-val">Leftovers 1</div></div>
       <div class="format-item"><div class="format-val">Leftovers 2</div></div>
+    </div>
+
+    <div class="reset-area">
+      <button class="reset-toggle" onclick="toggleReset()">⚙ administrasjon</button>
+      <div class="reset-confirm" id="reset-confirm">
+        <p>Dette vil slette <strong>alle resultater</strong> permanent. Skriv inn <strong>NULLSTILL</strong> for å bekrefte.</p>
+        <input type="text" id="reset-input" placeholder="NULLSTILL" autocomplete="off">
+        <button class="btn btn-danger" style="width:100%" onclick="resetAll()">Slett alle resultater</button>
+      </div>
     </div>
   </div>
 
@@ -472,6 +616,14 @@
   </div>
 </div>
 
+<div class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="active" onclick="showView('schedule', this)"><span class="nav-icon">📋</span>Kamper</button>
+    <button onclick="showView('standings', this)"><span class="nav-icon">🏆</span>Tabell</button>
+    <button onclick="showView('format', this)"><span class="nav-icon">ℹ️</span>Format</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -489,16 +641,16 @@ const headers = {
 const TEAMS = ['Sandefjord V2','Rinken','Torød Vikings','Leftovers 1','Leftovers 2'];
 
 const GAMES = [
-  { id:1,  time:'14:00', bold:true,  home:'Rinken',        away:'Torød Vikings',  resurface:false },
-  { id:2,  time:'14:20', bold:false, home:'Sandefjord V2', away:'Leftovers 2',    resurface:true  },
-  { id:3,  time:'15:00', bold:true,  home:'Rinken',        away:'Leftovers 1',    resurface:false },
-  { id:4,  time:'15:20', bold:false, home:'Torød Vikings', away:'Leftovers 2',    resurface:true  },
-  { id:5,  time:'16:00', bold:true,  home:'Sandefjord V2', away:'Leftovers 1',    resurface:false },
-  { id:6,  time:'16:20', bold:false, home:'Rinken',        away:'Leftovers 2',    resurface:true  },
-  { id:7,  time:'17:00', bold:true,  home:'Torød Vikings', away:'Leftovers 1',    resurface:false },
-  { id:8,  time:'17:20', bold:false, home:'Sandefjord V2', away:'Rinken',         resurface:true  },
-  { id:9,  time:'18:00', bold:true,  home:'Leftovers 1',   away:'Leftovers 2',    resurface:false },
-  { id:10, time:'18:20', bold:false, home:'Sandefjord V2', away:'Torød Vikings',  resurface:true  },
+  { id:1,  time:'14:00', home:'Rinken',        away:'Torød Vikings',  resurface:false, sec:'Leftovers 1'  },
+  { id:2,  time:'14:20', home:'Sandefjord V2', away:'Leftovers 2',    resurface:true,  sec:'Torød Vikings' },
+  { id:3,  time:'15:00', home:'Rinken',        away:'Leftovers 1',    resurface:false, sec:'Sandefjord V2' },
+  { id:4,  time:'15:20', home:'Torød Vikings', away:'Leftovers 2',    resurface:true,  sec:'Rinken'        },
+  { id:5,  time:'16:00', home:'Sandefjord V2', away:'Leftovers 1',    resurface:false, sec:'Torød Vikings' },
+  { id:6,  time:'16:20', home:'Rinken',        away:'Leftovers 2',    resurface:true,  sec:'Sandefjord V2' },
+  { id:7,  time:'17:00', home:'Torød Vikings', away:'Leftovers 1',    resurface:false, sec:'Leftovers 2'   },
+  { id:8,  time:'17:20', home:'Sandefjord V2', away:'Rinken',         resurface:true,  sec:'Torød Vikings' },
+  { id:9,  time:'18:00', home:'Leftovers 1',   away:'Leftovers 2',    resurface:false, sec:'Rinken'        },
+  { id:10, time:'18:20', home:'Sandefjord V2', away:'Torød Vikings',  resurface:true,  sec:'Leftovers 1'   },
 ];
 
 const FINALS = [
@@ -542,9 +694,10 @@ function renderGames(containerId, games) {
                     (g.type === 'bronze' ? ' is-bronze' : '');
     row.onclick = () => openModal(g.id);
 
-    const timeEl = `<span class="game-time">${g.time}</span>`;
-    const numEl  = `<span class="game-num">${g.id}</span>`;
-    const teamsEl = `<span class="game-teams">${g.home} <span style="color:var(--muted);font-weight:300">–</span> ${g.away}</span>`;
+    const timeEl   = `<span class="game-time">${g.time}</span>`;
+    const numEl    = `<span class="game-num">${g.id}</span>`;
+    const teamsEl  = `<span class="game-teams">${g.home} <span style="color:var(--muted);font-weight:300">–</span> ${g.away}</span>`;
+    const secEl    = g.sec ? `<span class="game-sec"><span>sek.</span>${g.sec}</span>` : `<span class="game-sec"></span>`;
 
     let resultEl;
     if (hasResult) {
@@ -554,7 +707,7 @@ function renderGames(containerId, games) {
       resultEl = `<span class="game-result empty">legg til</span>`;
     }
 
-    row.innerHTML = timeEl + numEl + teamsEl + resultEl;
+    row.innerHTML = timeEl + numEl + teamsEl + secEl + resultEl;
     el.appendChild(row);
 
     if (g.resurface) {
@@ -650,9 +803,9 @@ function renderStandings() {
     tr.innerHTML = `
       <td>${i+1}</td>
       <td>${team}</td>
-      <td>${s.gp}</td>
+      <td class="hide-mobile">${s.gp}</td>
       <td>${s.w}</td>
-      <td>${s.d}</td>
+      <td class="hide-mobile">${s.d}</td>
       <td>${s.l}</td>
       <td class="${diffClass}">${s.gp > 0 ? diffStr : '–'}</td>
       <td class="pts">${s.pts}</td>
@@ -716,9 +869,12 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 });
 
 async function saveResult() {
-  const home = parseInt(document.getElementById('input-home').value);
-  const away = parseInt(document.getElementById('input-away').value);
-  if (isNaN(home) || isNaN(away)) { showToast('Fyll inn begge resultater', true); return; }
+  const homeVal = document.getElementById('input-home').value;
+  const awayVal = document.getElementById('input-away').value;
+  if (homeVal === '' || awayVal === '') { showToast('Fyll inn begge resultater', true); return; }
+  const home = parseInt(homeVal, 10);
+  const away = parseInt(awayVal, 10);
+  if (isNaN(home) || isNaN(away) || home < 0 || away < 0) { showToast('Ugyldig resultat', true); return; }
   const shootout = document.getElementById('input-shootout').checked;
   if (shootout && !shootoutWinner) { showToast('Velg hvem som vant på straffeslag', true); return; }
 
@@ -766,6 +922,28 @@ async function clearResult() {
   }
 }
 
+// ── RESET ──
+function toggleReset() {
+  document.getElementById('reset-confirm').classList.toggle('visible');
+  document.getElementById('reset-input').value = '';
+}
+
+async function resetAll() {
+  const val = document.getElementById('reset-input').value.trim();
+  if (val !== 'NULLSTILL') { showToast('Skriv NULLSTILL for å bekrefte', true); return; }
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/results?id=neq.00000000-0000-0000-0000-000000000000`, {
+      method: 'DELETE', headers
+    });
+    document.getElementById('reset-confirm').classList.remove('visible');
+    document.getElementById('reset-input').value = '';
+    await fetchResults();
+    showToast('Alle resultater slettet');
+  } catch(e) {
+    showToast('Feil ved nullstilling', true);
+  }
+}
+
 // ── TOAST ──
 function showToast(msg, isError=false) {
   const t = document.getElementById('toast');
@@ -777,11 +955,16 @@ function showToast(msg, isError=false) {
 }
 
 // ── NAVIGATION ──
-function showView(name) {
+function showView(name, btn) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('nav button, .bottom-nav button').forEach(b => b.classList.remove('active'));
   document.getElementById(`view-${name}`).classList.add('active');
-  event.currentTarget.classList.add('active');
+  // Activate matching buttons in both navs
+  document.querySelectorAll(`nav button, .bottom-nav button`).forEach(b => {
+    if (b.textContent.toLowerCase().includes(name === 'schedule' ? 'kamp' : name === 'standings' ? 'tabell' : 'format')) {
+      b.classList.add('active');
+    }
+  });
   if (name === 'standings') renderStandings();
 }
 
