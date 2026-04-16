@@ -342,19 +342,22 @@
   .format-val { font-size: 0.9rem; font-weight: 500; }
 
   .game-sec {
-    font-size: 0.72rem;
-    color: var(--muted);
+    font-size: 0.8rem;
+    color: var(--text);
     text-align: right;
     white-space: nowrap;
-    min-width: 80px;
+    min-width: 90px;
+    font-weight: 500;
   }
-  .game-sec span { 
+  .game-sec span {
     display: block;
     font-size: 0.65rem;
-    letter-spacing: 0.06em;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--border);
-    margin-bottom: 1px;
+    color: var(--accent);
+    margin-bottom: 2px;
   }
 
   /* ── RESET BUTTON ── */
@@ -933,15 +936,16 @@ async function resetAll() {
   const val = document.getElementById('reset-input').value.trim();
   if (val !== 'NULLSTILL') { showToast('Skriv NULLSTILL for å bekrefte', true); return; }
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/results?id=neq.00000000-0000-0000-0000-000000000000`, {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/results?game_id=gte.0`, {
       method: 'DELETE', headers
     });
+    if (!r.ok) throw new Error(await r.text());
     document.getElementById('reset-confirm').classList.remove('visible');
     document.getElementById('reset-input').value = '';
     await fetchResults();
     showToast('Alle resultater slettet');
   } catch(e) {
-    showToast('Feil ved nullstilling', true);
+    showToast('Feil: ' + e.message, true);
   }
 }
 
