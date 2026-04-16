@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Åsgaardturneringen — Sluttspill</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  @font-face { font-family: 'Barlow Condensed'; font-display: swap; }
-  @font-face { font-family: 'Barlow'; font-display: swap; }
+  @font-face { font-family: 'Oswald'; font-display: swap; }
+  @font-face { font-family: 'Inter'; font-display: swap; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
@@ -31,11 +31,13 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 400;
     min-height: 100vh;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* ── HEADER ── */
@@ -56,7 +58,7 @@
     height: 56px;
   }
   .site-title {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 600;
     font-size: 1.4rem;
     letter-spacing: 0.04em;
@@ -68,7 +70,7 @@
     background: none;
     border: none;
     color: var(--muted);
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 600;
     font-size: 0.9rem;
     letter-spacing: 0.06em;
@@ -93,7 +95,7 @@
 
   /* ── SECTION LABEL ── */
   .section-label {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     font-size: 0.72rem;
     letter-spacing: 0.12em;
@@ -127,7 +129,7 @@
   .game-row.is-bronze  { border-left: 3px solid var(--bronze); }
 
   .game-time {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 600;
     font-size: 1rem;
     color: var(--gold);
@@ -139,9 +141,9 @@
     color: var(--gold);
   }
   .game-num { font-size: 0.75rem; color: var(--muted); text-align: center; }
-  .game-teams { font-size: 0.95rem; font-weight: 400; }
+  .game-teams { font-size: 1rem; font-weight: 400; }
   .game-result {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--text);
@@ -152,12 +154,12 @@
   .game-result .so-tag {
     font-size: 0.65rem;
     font-weight: 600;
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Inter', sans-serif;
     color: var(--muted);
     display: block;
     text-align: right;
   }
-  .game-result.empty { color: var(--muted); font-size: 0.8rem; font-family: 'Barlow', sans-serif; font-weight: 400; }
+  .game-result.empty { color: var(--muted); font-size: 0.8rem; font-family: 'Inter', sans-serif; font-weight: 400; }
 
   .resurface-row {
     padding: 5px 14px;
@@ -174,7 +176,7 @@
     font-style: normal;
     font-size: 0.72rem;
     color: var(--accent);
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 600;
     letter-spacing: 0.04em;
     white-space: nowrap;
@@ -187,7 +189,7 @@
   }
   .officials-label {
     font-size: 0.72rem;
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -210,7 +212,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     color: var(--text);
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 0.85rem;
     padding: 7px 10px;
     outline: none;
@@ -223,10 +225,10 @@
   .standings-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   .standings-table th {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     font-size: 0.72rem;
     letter-spacing: 0.1em;
@@ -291,7 +293,7 @@
     to   { transform: translateY(0);    opacity: 1; }
   }
   .modal-title {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: 0.04em;
@@ -308,27 +310,46 @@
 
   .score-row {
     display: grid;
-    grid-template-columns: 1fr 64px;
+    grid-template-columns: 1fr auto;
     align-items: center;
     gap: 12px;
     margin-bottom: 12px;
   }
   .score-label { font-size: 0.9rem; color: var(--text); font-weight: 500; }
-  .score-input {
+  .score-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    color: var(--text);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 1.4rem;
-    text-align: center;
-    padding: 8px;
-    width: 100%;
-    outline: none;
-    transition: border-color 0.15s;
+    overflow: hidden;
   }
-  .score-input:focus { border-color: var(--accent); }
+  .score-stepper button {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.4rem;
+    font-weight: 300;
+    width: 44px;
+    height: 48px;
+    cursor: pointer;
+    transition: background 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-stepper button:hover { background: var(--border); }
+  .score-stepper button:active { background: var(--accent); color: #0d0f14; }
+  .score-val {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--text);
+    min-width: 40px;
+    text-align: center;
+    user-select: none;
+  }
 
   .shootout-row {
     display: flex;
@@ -341,15 +362,15 @@
   .shootout-row input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; }
   .winner-row { display: none; margin-bottom: 1.5rem; }
   .winner-row.visible { display: block; }
-  .winner-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .winner-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
   .winner-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .winner-btn { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); color: var(--muted); font-family: 'Barlow', sans-serif; font-size: 0.85rem; font-weight: 500; padding: 9px 12px; cursor: pointer; text-align: center; transition: all 0.15s; }
+  .winner-btn { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); color: var(--muted); font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500; padding: 9px 12px; cursor: pointer; text-align: center; transition: all 0.15s; }
   .winner-btn:hover { border-color: var(--accent); color: var(--text); }
   .winner-btn.selected { background: rgba(79,195,247,0.12); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
   .btn {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     font-size: 0.9rem;
     letter-spacing: 0.06em;
@@ -384,7 +405,7 @@
   }
   .format-key {
     font-size: 0.72rem;
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -404,7 +425,7 @@
   .game-sec span {
     display: block;
     font-size: 0.65rem;
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -427,7 +448,7 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     cursor: pointer;
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     padding: 4px 8px;
     transition: color 0.2s;
   }
@@ -457,7 +478,7 @@
     outline: none;
     margin-bottom: 10px;
     letter-spacing: 0.2em;
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
   }
   .reset-confirm input:focus { border-color: var(--danger); }
   .loading { color: var(--muted); font-size: 0.85rem; padding: 1rem 0; }
@@ -495,7 +516,7 @@
     background: none;
     border: none;
     color: var(--muted);
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: 600;
     font-size: 0.85rem;
     letter-spacing: 0.06em;
@@ -550,8 +571,9 @@
       padding: 1.5rem 1.25rem 2rem;
     }
 
-    .score-input { font-size: 1.8rem; padding: 12px; }
-    .score-row { grid-template-columns: 1fr 76px; }
+    .score-stepper button { width: 52px; height: 56px; font-size: 1.6rem; }
+    .score-val { font-size: 2rem; min-width: 44px; }
+    .score-row { grid-template-columns: 1fr auto; }
     .winner-btn { padding: 12px; font-size: 0.9rem; }
     .format-grid { grid-template-columns: 1fr; }
     .modal-actions { gap: 8px; }
@@ -647,11 +669,19 @@
     <div class="modal-match" id="modal-match-name"></div>
     <div class="score-row">
       <span class="score-label" id="modal-home-label">Hjemmelag</span>
-      <input class="score-input" type="number" min="0" max="99" inputmode="numeric" pattern="[0-9]*" id="input-home" placeholder="0">
+      <div class="score-stepper">
+        <button onclick="changeScore('home', -1)">−</button>
+        <span class="score-val" id="score-home">0</span>
+        <button onclick="changeScore('home', 1)">+</button>
+      </div>
     </div>
     <div class="score-row">
       <span class="score-label" id="modal-away-label">Bortelag</span>
-      <input class="score-input" type="number" min="0" max="99" inputmode="numeric" pattern="[0-9]*" id="input-away" placeholder="0">
+      <div class="score-stepper">
+        <button onclick="changeScore('away', -1)">−</button>
+        <span class="score-val" id="score-away">0</span>
+        <button onclick="changeScore('away', 1)">+</button>
+      </div>
     </div>
     <div class="shootout-row">
       <input type="checkbox" id="input-shootout" onchange="toggleShootoutWinner()">
@@ -883,7 +913,12 @@ function renderStandings() {
 }
 
 // ── MODAL ──
-let shootoutWinner = null; // 'home' or 'away'
+let scores = { home: 0, away: 0 };
+
+function changeScore(side, delta) {
+  scores[side] = Math.max(0, scores[side] + delta);
+  document.getElementById(`score-${side}`).textContent = scores[side];
+}
 
 function toggleShootoutWinner() {
   const checked = document.getElementById('input-shootout').checked;
@@ -914,8 +949,10 @@ function openModal(gameId) {
   document.getElementById('winner-away').textContent = g.away;
 
   const res = results[gameId];
-  document.getElementById('input-home').value = res?.home_score != null ? res.home_score : '';
-  document.getElementById('input-away').value = res?.away_score != null ? res.away_score : '';
+  scores.home = res?.home_score ?? 0;
+  scores.away = res?.away_score ?? 0;
+  document.getElementById('score-home').textContent = scores.home;
+  document.getElementById('score-away').textContent = scores.away;
   document.getElementById('input-shootout').checked = res?.shootout ?? false;
 
   shootoutWinner = res?.shootout_winner ?? null;
@@ -931,7 +968,6 @@ function openModal(gameId) {
   document.getElementById('iskjorer-row').style.display = hasIskjorer ? 'grid' : 'none';
 
   document.getElementById('modal-overlay').classList.add('open');
-  document.getElementById('input-home').focus();
 }
 
 function closeModal() {
@@ -944,12 +980,8 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 });
 
 async function saveResult() {
-  const homeVal = document.getElementById('input-home').value.trim();
-  const awayVal = document.getElementById('input-away').value.trim();
-  if (homeVal === '' || awayVal === '') { showToast('Fyll inn begge resultater', true); return; }
-  const home = Number(homeVal);
-  const away = Number(awayVal);
-  if (!Number.isFinite(home) || !Number.isFinite(away) || home < 0 || away < 0 || !Number.isInteger(home) || !Number.isInteger(away)) { showToast('Ugyldig resultat', true); return; }
+  const home = scores.home;
+  const away = scores.away;
   const shootout = document.getElementById('input-shootout').checked;
   if (shootout && !shootoutWinner) { showToast('Velg hvem som vant på straffeslag', true); return; }
 
