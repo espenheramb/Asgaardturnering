@@ -165,7 +165,59 @@
     color: var(--muted);
     font-style: italic;
     letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
   }
+  .iskjorer-tag {
+    font-style: normal;
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .officials-section {
+    border-top: 1px solid var(--border);
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+  .officials-label {
+    font-size: 0.72rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .official-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .official-key {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .official-input {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.85rem;
+    padding: 7px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  .official-input:focus { border-color: var(--accent); }
 
   /* ── TABLE VIEW ── */
   .standings-table {
@@ -612,6 +664,17 @@
         <button class="winner-btn" id="winner-away" onclick="selectWinner('away')"></button>
       </div>
     </div>
+    <div class="officials-section">
+      <div class="officials-label">Funksjonærer</div>
+      <div class="official-row">
+        <span class="official-key">Dommer(e)</span>
+        <input class="official-input" type="text" id="input-referee" placeholder="Navn(ene)">
+      </div>
+      <div class="official-row" id="iskjorer-row">
+        <span class="official-key">Iskjører</span>
+        <input class="official-input" type="text" id="input-iskjorer" placeholder="Navn">
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-danger" id="btn-clear" onclick="clearResult()">Slett</button>
       <button class="btn btn-ghost" onclick="closeModal()">Avbryt</button>
@@ -645,21 +708,21 @@ const headers = {
 const TEAMS = ['Sandefjord V2','Rinken','Torød Vikings','Leftovers 1','Leftovers 2'];
 
 const GAMES = [
-  { id:1,  time:'14:00', home:'Rinken',        away:'Torød Vikings',  resurface:false, sec:'Leftovers 1'  },
-  { id:2,  time:'14:20', home:'Sandefjord V2', away:'Leftovers 2',    resurface:true,  sec:'Torød Vikings' },
-  { id:3,  time:'15:00', home:'Rinken',        away:'Leftovers 1',    resurface:false, sec:'Sandefjord V2' },
-  { id:4,  time:'15:20', home:'Torød Vikings', away:'Leftovers 2',    resurface:true,  sec:'Rinken'        },
-  { id:5,  time:'16:00', home:'Sandefjord V2', away:'Leftovers 1',    resurface:false, sec:'Torød Vikings' },
-  { id:6,  time:'16:20', home:'Rinken',        away:'Leftovers 2',    resurface:true,  sec:'Sandefjord V2' },
-  { id:7,  time:'17:00', home:'Torød Vikings', away:'Leftovers 1',    resurface:false, sec:'Leftovers 2'   },
-  { id:8,  time:'17:20', home:'Sandefjord V2', away:'Rinken',         resurface:true,  sec:'Torød Vikings' },
-  { id:9,  time:'18:00', home:'Leftovers 1',   away:'Leftovers 2',    resurface:false, sec:'Rinken'        },
-  { id:10, time:'18:20', home:'Sandefjord V2', away:'Torød Vikings',  resurface:true,  sec:'Leftovers 1'   },
+  { id:1,  time:'14:00', home:'Rinken',        away:'Torød Vikings',  resurface:false, sec:'Leftovers 1',   iskjorer:null },
+  { id:2,  time:'14:20', home:'Sandefjord V2', away:'Leftovers 2',    resurface:true,  sec:'Torød Vikings',  iskjorer:'Sandefjord V2' },
+  { id:3,  time:'15:00', home:'Rinken',        away:'Leftovers 1',    resurface:false, sec:'Sandefjord V2',  iskjorer:null },
+  { id:4,  time:'15:20', home:'Torød Vikings', away:'Leftovers 2',    resurface:true,  sec:'Rinken',         iskjorer:'Torød Vikings' },
+  { id:5,  time:'16:00', home:'Sandefjord V2', away:'Leftovers 1',    resurface:false, sec:'Torød Vikings',  iskjorer:null },
+  { id:6,  time:'16:20', home:'Rinken',        away:'Leftovers 2',    resurface:true,  sec:'Sandefjord V2',  iskjorer:'Leftovers 2' },
+  { id:7,  time:'17:00', home:'Torød Vikings', away:'Leftovers 1',    resurface:false, sec:'Leftovers 2',    iskjorer:null },
+  { id:8,  time:'17:20', home:'Sandefjord V2', away:'Rinken',         resurface:true,  sec:'Torød Vikings',  iskjorer:'Rinken' },
+  { id:9,  time:'18:00', home:'Leftovers 1',   away:'Leftovers 2',    resurface:false, sec:'Rinken',         iskjorer:null },
+  { id:10, time:'18:20', home:'Sandefjord V2', away:'Torød Vikings',  resurface:true,  sec:'Leftovers 1',    iskjorer:'Leftovers 1' },
 ];
 
 const FINALS = [
-  { id:11, time:'19:00', bold:true, home:'Bronsefinale', away:'3. og 4. plass', resurface:true,  type:'bronze' },
-  { id:12, time:'20:00', bold:true, home:'Gullfinale',   away:'1. og 2. plass', resurface:false, type:'gold'   },
+  { id:11, time:'19:00', home:'Bronsefinale', away:'3. og 4. plass', resurface:true,  type:'bronze', iskjorer:'Seeding avgjør' },
+  { id:12, time:'20:00', home:'Gullfinale',   away:'1. og 2. plass', resurface:false, type:'gold',   iskjorer:null },
 ];
 
 let results = {};
@@ -717,7 +780,8 @@ function renderGames(containerId, games) {
     if (g.resurface) {
       const resRow = document.createElement('div');
       resRow.className = 'resurface-row';
-      resRow.textContent = '↳ islegging (~15 min) + pause';
+      const iskText = g.iskjorer ? ` <span class="iskjorer-tag">iskjører: ${g.iskjorer}</span>` : '';
+      resRow.innerHTML = `↳ islegging (~15 min) + pause${iskText}`;
       el.appendChild(resRow);
     }
   });
@@ -859,6 +923,13 @@ function openModal(gameId) {
   document.getElementById('winner-row').classList.toggle('visible', !!res?.shootout);
   document.getElementById('btn-clear').style.display = res ? 'block' : 'none';
 
+  document.getElementById('input-referee').value = res?.referee ?? '';
+  document.getElementById('input-iskjorer').value = res?.iskjorer ?? '';
+  // Show/hide iskjorer field based on whether this game has resurface after it
+  const allGames2 = [...GAMES, ...FINALS];
+  const hasIskjorer = allGames2.some(x => x.resurface && x.id === gameId);
+  document.getElementById('iskjorer-row').style.display = hasIskjorer ? 'grid' : 'none';
+
   document.getElementById('modal-overlay').classList.add('open');
   document.getElementById('input-home').focus();
 }
@@ -888,6 +959,8 @@ async function saveResult() {
     away_score: away,
     shootout,
     shootout_winner: shootout ? shootoutWinner : null,
+    referee: document.getElementById('input-referee').value.trim() || null,
+    iskjorer: document.getElementById('input-iskjorer').value.trim() || null,
     updated_at: new Date().toISOString()
   };
 
