@@ -1182,9 +1182,6 @@ submitPin = function() {
   _origSubmitPin();
   if (pinUnlocked) document.getElementById('pin-btn').textContent = '🔓';
 };
-  document.getElementById('pin-overlay').classList.remove('open');
-  pendingAction = null;
-}
 
 document.getElementById('pin-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') submitPin();
