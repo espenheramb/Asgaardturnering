@@ -1149,7 +1149,7 @@ function requirePin(action) {
   document.getElementById('pin-input').value = '';
   document.getElementById('pin-error').textContent = '';
   document.getElementById('pin-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('pin-input').focus(), 100);
+  document.getElementById('pin-input').focus();
 }
 
 function submitPin() {
@@ -1158,7 +1158,11 @@ function submitPin() {
     pinUnlocked = true;
     document.getElementById('pin-btn').textContent = '🔓';
     document.getElementById('pin-overlay').classList.remove('open');
-    if (pendingAction) { pendingAction(); pendingAction = null; }
+    if (pendingAction) {
+      const action = pendingAction;
+      pendingAction = null;
+      setTimeout(() => action(), 50);
+    }
   } else {
     document.getElementById('pin-error').textContent = 'Feil PIN — prøv igjen';
     document.getElementById('pin-input').value = '';
