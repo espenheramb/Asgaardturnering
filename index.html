@@ -15,7 +15,7 @@
     --surface:  #161a22;
     --card:     #1c2030;
     --border:   #2a2f3d;
-    --accent:   #f59e0b;
+    --accent:   #4fc3f7;
     --accent2:  #f59e0b;
     --text:     #e8eaf0;
     --muted:    #6b7280;
@@ -81,7 +81,7 @@
     transition: color 0.15s, background 0.15s;
   }
   nav button:hover { color: var(--text); background: var(--card); }
-  nav button.active { color: var(--accent); background: rgba(245,158,11,0.1); }
+  nav button.active { color: var(--accent); background: rgba(79,195,247,0.08); }
 
   /* ── MAIN ── */
   main {
@@ -159,12 +159,7 @@
     display: block;
     text-align: right;
   }
-  .game-result.empty {
-    color: var(--border);
-    font-size: 1.1rem;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-  }
+  .game-result.empty { color: var(--muted); font-size: 0.8rem; font-family: 'Inter', sans-serif; font-weight: 400; }
 
   .officials-row {
     padding: 4px 14px 6px;
@@ -180,7 +175,7 @@
     font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--accent);
     margin-right: 4px;
   }
   .officials-row-sep { color: var(--border); }
@@ -217,9 +212,9 @@
   .iskjorer-tag {
     font-style: normal;
     font-size: 0.72rem;
-    color: var(--text);
+    color: var(--accent);
     font-family: 'Oswald', sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.04em;
     white-space: nowrap;
   }
@@ -408,7 +403,7 @@
   .winner-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .winner-btn { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); color: var(--muted); font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500; padding: 9px 12px; cursor: pointer; text-align: center; transition: all 0.15s; }
   .winner-btn:hover { border-color: var(--accent); color: var(--text); }
-  .winner-btn.selected { background: rgba(245,158,11,0.12); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .winner-btn.selected { background: rgba(79,195,247,0.12); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
   .btn {
@@ -471,7 +466,7 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--accent);
     margin-bottom: 2px;
   }
 
@@ -542,88 +537,7 @@
   }
   .toast.show { opacity: 1; }
 
-  /* ── CELEBRATION MODAL ── */
-  .celebration-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 300;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  .celebration-overlay.open { display: flex; }
-  .celebration {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2rem 1.75rem;
-    width: 100%;
-    max-width: 420px;
-    text-align: center;
-    animation: celebPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  @keyframes celebPop {
-    from { transform: scale(0.7); opacity: 0; }
-    to   { transform: scale(1);   opacity: 1; }
-  }
-  .celeb-emoji { font-size: 3rem; margin-bottom: 0.5rem; display: block; }
-  .celeb-title {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-  }
-  .podium {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 1.75rem;
-  }
-  .podium-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-  }
-  .podium-row.gold-row   { border-color: var(--gold); background: rgba(245,158,11,0.08); }
-  .podium-row.silver-row { border-color: #9ca3af; background: rgba(156,163,175,0.08); }
-  .podium-row.bronze-row { border-color: var(--bronze); background: rgba(205,124,58,0.08); }
-  .podium-medal { font-size: 1.6rem; min-width: 36px; text-align: center; }
-  .podium-team {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 600;
-    font-size: 1.2rem;
-    text-align: left;
-    flex: 1;
-  }
-  .podium-row.gold-row   .podium-team { color: var(--gold); }
-  .podium-row.silver-row .podium-team { color: #d1d5db; }
-  .podium-row.bronze-row .podium-team { color: var(--bronze); }
-  .podium-place {
-    font-size: 0.75rem;
-    color: var(--muted);
-    font-family: 'Oswald', sans-serif;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  /* confetti canvas */
-  #confetti-canvas {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 299;
-    display: none;
-  }
-  #confetti-canvas.active { display: block; }
+  /* ── MOBILE BOTTOM NAV ── */
   .bottom-nav {
     display: none;
     position: fixed;
@@ -722,10 +636,6 @@
   <!-- SCHEDULE VIEW -->
   <div id="view-schedule" class="view active">
     <div class="section-label">Gruppespill</div>
-    <div id="pre-resurface" class="resurface-row" style="margin-bottom:3px;cursor:pointer;" onclick="openIskjorerModal(0)">
-      <span>14:00 &nbsp;↳ islegging (~15 min)</span>
-      <span id="pre-isk-btn" class="iskjorer-btn">+ legg til iskjører</span>
-    </div>
     <div class="schedule" id="schedule-group"></div>
     <div class="section-label">Sluttspill — seeding etter tabell</div>
     <div class="schedule" id="schedule-finals"></div>
@@ -760,16 +670,17 @@
   <div id="view-format" class="view">
     <div class="section-label">Turneringsformat</div>
     <div class="format-grid">
-      <div class="format-item"><div class="format-key">Gruppespill</div><div class="format-val">Full round robin, 6 kamper</div></div>
-      <div class="format-item"><div class="format-key">Kampvarighet</div><div class="format-val">2 × 15 min (løpende tid)</div></div>
-      <div class="format-item"><div class="format-key">Program</div><div class="format-val">Én kamp per time, islegging mellom</div></div>
-      <div class="format-item"><div class="format-key">Islegging</div><div class="format-val">Mellom hver kamp (~15 min)</div></div>
-      <div class="format-item"><div class="format-key">Finaler</div><div class="format-val">Bronsefinale 19:50 · Gullfinale 20:40</div></div>
+      <div class="format-item"><div class="format-key">Gruppespill</div><div class="format-val">Full round robin, 10 kamper</div></div>
+      <div class="format-item"><div class="format-key">Kampvarighet</div><div class="format-val">1 × 20 min (løpende tid)</div></div>
+      <div class="format-item"><div class="format-key">Program</div><div class="format-val">2 kamper per time, fra hel time</div></div>
+      <div class="format-item"><div class="format-key">Islegging</div><div class="format-val">Mellom hver time (~15 min)</div></div>
+      <div class="format-item"><div class="format-key">Finaler</div><div class="format-val">Bronsefinale 19:00 · Gullfinale 20:00</div></div>
       <div class="format-item"><div class="format-key">Uavgjort</div><div class="format-val">3 mot 3 i 3 min, deretter straffeslag</div></div>
     </div>
 
     <div class="section-label" style="margin-top:2rem;">Lag</div>
     <div class="format-grid">
+      <div class="format-item"><div class="format-val">Sandefjord V2</div></div>
       <div class="format-item"><div class="format-val">Rinken</div></div>
       <div class="format-item"><div class="format-val">Torød Vikings</div></div>
       <div class="format-item"><div class="format-val">Leftovers 1</div></div>
@@ -826,10 +737,6 @@
         <span class="official-key">Dommer(e)</span>
         <input class="official-input" type="text" id="input-referee" placeholder="Navn(ene)">
       </div>
-      <div class="official-row" id="iskjorer-field-row">
-        <span class="official-key">Iskjører</span>
-        <input class="official-input" type="text" id="input-iskjorer" placeholder="Navn" style="font-size:1rem;">
-      </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-danger" id="btn-clear" onclick="clearResult()">Slett</button>
@@ -839,45 +746,18 @@
   </div>
 </div>
 
-<!-- CELEBRATION -->
-<canvas id="confetti-canvas"></canvas>
-<div class="celebration-overlay" id="celebration-overlay">
-  <div class="celebration">
-    <span class="celeb-emoji">🏆</span>
-    <div class="celeb-title">Åsgaardturneringen — Sluttspill</div>
-    <div class="podium">
-      <div class="podium-row gold-row">
-        <span class="podium-medal">🥇</span>
-        <span class="podium-team" id="celeb-gold"></span>
-        <span class="podium-place">1. plass</span>
-      </div>
-      <div class="podium-row silver-row">
-        <span class="podium-medal">🥈</span>
-        <span class="podium-team" id="celeb-silver"></span>
-        <span class="podium-place">2. plass</span>
-      </div>
-      <div class="podium-row bronze-row">
-        <span class="podium-medal">🥉</span>
-        <span class="podium-team" id="celeb-bronze"></span>
-        <span class="podium-place">3. plass</span>
-      </div>
-    </div>
-    <button class="btn btn-ghost" style="width:100%" onclick="closeCelebration()">Lukk</button>
-  </div>
-</div>
-
-<!-- PRE-GAME ISKJORER MODAL -->
-<div class="modal-overlay" id="pre-iskjorer-overlay">
+<!-- ISKJORER MODAL -->
+<div class="modal-overlay" id="iskjorer-overlay">
   <div class="modal" style="max-width:340px;">
     <div class="modal-title">Iskjører</div>
-    <div class="modal-match">Islegging før første kamp (14:00)</div>
+    <div class="modal-match" id="iskjorer-game-name"></div>
     <div class="official-row" style="margin-bottom:1.5rem;">
       <span class="official-key">Navn</span>
-      <input class="official-input" type="text" id="pre-iskjorer-input" placeholder="Navn på iskjører">
+      <input class="official-input" type="text" id="iskjorer-input" placeholder="Navn på iskjører">
     </div>
     <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closePreIskjorer()">Avbryt</button>
-      <button class="btn btn-primary" onclick="savePreIskjorer()">Lagre</button>
+      <button class="btn btn-ghost" onclick="closeIskjorerModal()">Avbryt</button>
+      <button class="btn btn-primary" onclick="saveIskjorer()">Lagre</button>
     </div>
   </div>
 </div>
@@ -904,20 +784,24 @@ const headers = {
 };
 
 // ── DATA ──
-const TEAMS = ['Rinken','Torød Vikings','Leftovers 1','Leftovers 2'];
+const TEAMS = ['Sandefjord V2','Rinken','Torød Vikings','Leftovers 1','Leftovers 2'];
 
 const GAMES = [
-  { id:1,  time:'14:50', home:'Rinken',        away:'Torød Vikings',  resurface:true,  sec:'Leftovers 1',   iskjorer:'Leftovers 2' },
-  { id:2,  time:'15:40', home:'Leftovers 1',   away:'Leftovers 2',    resurface:true,  sec:'Torød Vikings',  iskjorer:'Leftovers 2' },
-  { id:3,  time:'16:30', home:'Rinken',        away:'Leftovers 1',    resurface:true,  sec:'Leftovers 2',   iskjorer:'Torød Vikings' },
-  { id:4,  time:'17:20', home:'Torød Vikings', away:'Leftovers 2',    resurface:true,  sec:'Rinken',        iskjorer:'Leftovers 1' },
-  { id:5,  time:'18:10', home:'Rinken',        away:'Leftovers 2',    resurface:true,  sec:'Torød Vikings', iskjorer:'Rinken' },
-  { id:6,  time:'19:00', home:'Torød Vikings', away:'Leftovers 1',    resurface:true,  sec:'Rinken',        iskjorer:null },
+  { id:1,  time:'14:00', home:'Rinken',        away:'Torød Vikings',  resurface:false, sec:'Leftovers 1',   iskjorer:null },
+  { id:2,  time:'14:20', home:'Sandefjord V2', away:'Leftovers 2',    resurface:true,  sec:'Torød Vikings',  iskjorer:null },
+  { id:3,  time:'15:00', home:'Rinken',        away:'Leftovers 1',    resurface:false, sec:'Sandefjord V2',  iskjorer:null },
+  { id:4,  time:'15:20', home:'Torød Vikings', away:'Leftovers 2',    resurface:true,  sec:'Rinken',         iskjorer:'Torød Vikings' },
+  { id:5,  time:'16:00', home:'Sandefjord V2', away:'Leftovers 1',    resurface:false, sec:'Torød Vikings',  iskjorer:null },
+  { id:6,  time:'16:20', home:'Rinken',        away:'Leftovers 2',    resurface:true,  sec:'Sandefjord V2',  iskjorer:'Leftovers 2' },
+  { id:7,  time:'17:00', home:'Torød Vikings', away:'Leftovers 1',    resurface:false, sec:'Leftovers 2',    iskjorer:null },
+  { id:8,  time:'17:20', home:'Sandefjord V2', away:'Rinken',         resurface:true,  sec:'Torød Vikings',  iskjorer:'Rinken' },
+  { id:9,  time:'18:00', home:'Leftovers 1',   away:'Leftovers 2',    resurface:false, sec:'Rinken',         iskjorer:null },
+  { id:10, time:'18:20', home:'Sandefjord V2', away:'Torød Vikings',  resurface:true,  sec:'Leftovers 1',    iskjorer:'Leftovers 1' },
 ];
 
 const FINALS = [
-  { id:7,  time:'19:50', title:'Bronsefinale', home:'3. plass', away:'4. plass', resurface:true,  type:'bronze' },
-  { id:8,  time:'20:40', title:'Gullfinale',   home:'1. plass', away:'2. plass', resurface:false, type:'gold'   },
+  { id:11, time:'19:00', home:'Bronsefinale', away:'3. og 4. plass', resurface:true,  type:'bronze', iskjorer:'Seeding avgjør' },
+  { id:12, time:'20:00', home:'Gullfinale',   away:'1. og 2. plass', resurface:false, type:'gold',   iskjorer:null },
 ];
 
 let results = {};
@@ -930,8 +814,8 @@ async function fetchResults() {
     const data = await r.json();
     results = {};
     data.forEach(d => results[d.game_id] = d);
-    renderStandings();
     renderSchedule();
+    renderStandings();
   } catch(e) {
     console.error(e);
   }
@@ -939,13 +823,6 @@ async function fetchResults() {
 
 // ── RENDER SCHEDULE ──
 function renderSchedule() {
-  // Update pre-game islegging row
-  const preIsk = results[0]?.iskjorer;
-  const preBtn = document.getElementById('pre-isk-btn');
-  if (preBtn) preBtn.outerHTML = preIsk
-    ? `<span id="pre-isk-btn" class="iskjorer-tag">${preIsk}</span>`
-    : `<span id="pre-isk-btn" class="iskjorer-btn">+ legg til iskjører</span>`;
-
   renderGames('schedule-group', GAMES);
   renderGames('schedule-finals', FINALS);
 }
@@ -965,9 +842,7 @@ function renderGames(containerId, games) {
 
     const timeEl   = `<span class="game-time">${g.time}</span>`;
     const numEl    = `<span class="game-num">${g.id}</span>`;
-    const teamsEl  = g.title
-      ? `<span class="game-teams"><strong>${g.title}</strong> <span style="color:var(--muted);font-size:0.85rem">${g.home} – ${g.away}</span></span>`
-      : `<span class="game-teams">${g.home} <span style="color:var(--muted);font-weight:300">–</span> ${g.away}</span>`;
+    const teamsEl  = `<span class="game-teams">${g.home} <span style="color:var(--muted);font-weight:300">–</span> ${g.away}</span>`;
     const secEl    = g.sec ? `<span class="game-sec"><span>sek.</span>${g.sec}</span>` : `<span class="game-sec"></span>`;
 
     let resultEl;
@@ -975,7 +850,7 @@ function renderGames(containerId, games) {
       const so = res.shootout ? '<span class="so-tag">straffeslag</span>' : '';
       resultEl = `<span class="game-result">${res.home_score} – ${res.away_score}${so}</span>`;
     } else {
-      resultEl = `<span class="game-result empty">0 – 0</span>`;
+      resultEl = `<span class="game-result empty">legg til</span>`;
     }
 
     row.innerHTML = timeEl + numEl + teamsEl + secEl + resultEl;
@@ -994,12 +869,13 @@ function renderGames(containerId, games) {
     if (g.resurface) {
       const resRow = document.createElement('div');
       resRow.className = 'resurface-row';
-      const storedIsk = results[g.id]?.iskjorer;
+      const gameId = g.id;
+      const storedIsk = results[gameId]?.iskjorer;
       const iskBtn = storedIsk
-        ? `<span class="iskjorer-tag">${storedIsk}</span>`
-        : `<span class="iskjorer-btn">+ iskjører</span>`;
-      resRow.innerHTML = `<span>↳ islegging (~15 min)</span>${iskBtn}`;
-      resRow.onclick = (e) => { e.stopPropagation(); openModal(g.id); };
+        ? `<span class="iskjorer-tag">iskjører: ${storedIsk}</span>`
+        : `<span class="iskjorer-btn">+ legg til iskjører</span>`;
+      resRow.innerHTML = `<span>↳ islegging (~15 min) + pause</span>${iskBtn}`;
+      resRow.onclick = (e) => { e.stopPropagation(); openIskjorerModal(gameId); };
       el.appendChild(resRow);
     }
   });
@@ -1073,23 +949,6 @@ function renderStandings() {
     return pb.gf - pa.gf;
   });
 
-  // Auto-fill finals if all group games are done
-  const allGroupDone = GAMES.every(g => {
-    const r = results[g.id];
-    return r && r.home_score !== null;
-  });
-  if (allGroupDone && sorted.length >= 4) {
-    FINALS[0].home = sorted[2];
-    FINALS[0].away = sorted[3];
-    FINALS[1].home = sorted[0];
-    FINALS[1].away = sorted[1];
-  } else {
-    FINALS[0].home = '3. plass';
-    FINALS[0].away = '4. plass';
-    FINALS[1].home = '1. plass';
-    FINALS[1].away = '2. plass';
-  }
-
   const tbody = document.getElementById('standings-body');
   tbody.innerHTML = '';
   sorted.forEach((team, i) => {
@@ -1115,9 +974,6 @@ function renderStandings() {
     `;
     tbody.appendChild(tr);
   });
-
-  // Check if tournament is over
-  checkCelebration(sorted);
 }
 
 // ── MODAL ──
@@ -1150,7 +1006,7 @@ function openModal(gameId) {
   if (!g) return;
   currentGameId = gameId;
 
-  document.getElementById('modal-match-name').textContent = g.title ? `${g.title} — ${g.home} vs ${g.away}` : `${g.home} – ${g.away}`;
+  document.getElementById('modal-match-name').textContent = `${g.home} – ${g.away}`;
   document.getElementById('modal-home-label').textContent = g.home;
   document.getElementById('modal-away-label').textContent = g.away;
   document.getElementById('winner-home').textContent = g.home;
@@ -1169,39 +1025,11 @@ function openModal(gameId) {
   document.getElementById('btn-clear').style.display = res ? 'block' : 'none';
 
   document.getElementById('input-referee').value = res?.referee ?? '';
-  document.getElementById('input-iskjorer').value = res?.iskjorer ?? '';
-  // Show suggested iskjorer as placeholder
-  const iskInput = document.getElementById('input-iskjorer');
-  iskInput.placeholder = g.iskjorer ? `Forslag: ${g.iskjorer}` : 'Navn på iskjører';
+  // Show/hide iskjorer field based on whether this game has resurface after it
+  const allGames2 = [...GAMES, ...FINALS];
+  const hasIskjorer = allGames2.some(x => x.resurface && x.id === gameId);
 
   document.getElementById('modal-overlay').classList.add('open');
-}
-
-// Pre-game islegging iskjorer (id=0)
-let preIskjorerOpen = false;
-function openIskjorerModal(gameId) {
-  if (gameId !== 0) { openModal(gameId); return; }
-  currentGameId = 0;
-  document.getElementById('pre-iskjorer-overlay').classList.add('open');
-  document.getElementById('pre-iskjorer-input').value = results[0]?.iskjorer ?? '';
-}
-function closePreIskjorer() {
-  document.getElementById('pre-iskjorer-overlay').classList.remove('open');
-  currentGameId = null;
-}
-async function savePreIskjorer() {
-  const val = document.getElementById('pre-iskjorer-input').value.trim() || null;
-  try {
-    const existing = results[0];
-    if (existing) {
-      await fetch(`${SUPABASE_URL}/rest/v1/results?game_id=eq.0`, { method: 'PATCH', headers, body: JSON.stringify({ iskjorer: val }) });
-    } else {
-      await fetch(`${SUPABASE_URL}/rest/v1/results`, { method: 'POST', headers, body: JSON.stringify({ game_id: 0, iskjorer: val }) });
-    }
-    closePreIskjorer();
-    await fetchResults();
-    showToast('Iskjører lagret ✓');
-  } catch(e) { showToast('Feil: ' + e.message, true); }
 }
 
 function closeModal() {
@@ -1211,10 +1039,6 @@ function closeModal() {
 
 document.getElementById('modal-overlay').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeModal();
-});
-
-document.getElementById('pre-iskjorer-overlay').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closePreIskjorer();
 });
 
 async function saveResult() {
@@ -1230,7 +1054,6 @@ async function saveResult() {
     shootout,
     shootout_winner: shootout ? shootoutWinner : null,
     referee: document.getElementById('input-referee').value.trim() || null,
-    iskjorer: document.getElementById('input-iskjorer').value.trim() || null,
     updated_at: new Date().toISOString()
   };
 
@@ -1271,92 +1094,49 @@ async function clearResult() {
   }
 }
 
-// ── CELEBRATION ──
-let celebrationShown = false;
+// ── ISKJORER MODAL ──
+let currentIskjorerGameId = null;
 
-function checkCelebration(sorted) {
-  const goldRes   = results[FINALS[1].id];
-  const bronzeRes = results[FINALS[0].id];
-  if (!goldRes || goldRes.home_score === null) return;
-  if (!bronzeRes || bronzeRes.home_score === null) return;
-  if (celebrationShown) return;
-
-  const allGroupDone2 = GAMES.every(g => { const r = results[g.id]; return r && r.home_score !== null; });
-  if (!allGroupDone2) return; // finals teams not yet determined
-
-  const homeTeam = FINALS[1].home;
-  const awayTeam = FINALS[1].away;
-  const bronzeHome = FINALS[0].home;
-  const bronzeAway = FINALS[0].away;
-
-  const goldWinner = goldRes.shootout
-    ? (goldRes.shootout_winner === 'home' ? homeTeam : awayTeam)
-    : (goldRes.home_score > goldRes.away_score ? homeTeam : awayTeam);
-  const silverWinner = goldWinner === homeTeam ? awayTeam : homeTeam;
-  const bronzeWinner = bronzeRes.shootout
-    ? (bronzeRes.shootout_winner === 'home' ? bronzeHome : bronzeAway)
-    : (bronzeRes.home_score > bronzeRes.away_score ? bronzeHome : bronzeAway);
-
-  document.getElementById('celeb-gold').textContent   = goldWinner;
-  document.getElementById('celeb-silver').textContent = silverWinner;
-  document.getElementById('celeb-bronze').textContent = bronzeWinner;
-
-  celebrationShown = true;
-  setTimeout(() => {
-    document.getElementById('celebration-overlay').classList.add('open');
-    startConfetti();
-  }, 600);
+function openIskjorerModal(gameId) {
+  currentIskjorerGameId = gameId;
+  const allGames = [...GAMES, ...FINALS];
+  const g = allGames.find(x => x.id === gameId);
+  document.getElementById('iskjorer-game-name').textContent = `Etter kamp ${gameId}: ${g.home} – ${g.away}`;
+  document.getElementById('iskjorer-input').value = results[gameId]?.iskjorer ?? '';
+  document.getElementById('iskjorer-overlay').classList.add('open');
+  document.getElementById('iskjorer-input').focus();
 }
 
-function closeCelebration() {
-  document.getElementById('celebration-overlay').classList.remove('open');
-  stopConfetti();
+function closeIskjorerModal() {
+  document.getElementById('iskjorer-overlay').classList.remove('open');
+  currentIskjorerGameId = null;
 }
 
-// Simple confetti
-let confettiAnim = null;
-const COLORS = ['#f59e0b','#ef4444','#22c55e','#4fc3f7','#a78bfa','#f472b6'];
+document.getElementById('iskjorer-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeIskjorerModal();
+});
 
-function startConfetti() {
-  const canvas = document.getElementById('confetti-canvas');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  canvas.classList.add('active');
-  const ctx = canvas.getContext('2d');
-  const pieces = Array.from({length: 120}, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * -canvas.height,
-    w: 8 + Math.random() * 8,
-    h: 4 + Math.random() * 4,
-    color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    rot: Math.random() * Math.PI * 2,
-    vx: (Math.random() - 0.5) * 2,
-    vy: 2 + Math.random() * 3,
-    vr: (Math.random() - 0.5) * 0.15,
-  }));
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    pieces.forEach(p => {
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
-      ctx.restore();
-      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
-      if (p.y > canvas.height) { p.y = -20; p.x = Math.random() * canvas.width; }
-    });
-    confettiAnim = requestAnimationFrame(draw);
+async function saveIskjorer() {
+  const val = document.getElementById('iskjorer-input').value.trim() || null;
+  try {
+    const existing = results[currentIskjorerGameId];
+    let r;
+    if (existing) {
+      r = await fetch(`${SUPABASE_URL}/rest/v1/results?game_id=eq.${currentIskjorerGameId}`, {
+        method: 'PATCH', headers, body: JSON.stringify({ iskjorer: val })
+      });
+    } else {
+      r = await fetch(`${SUPABASE_URL}/rest/v1/results`, {
+        method: 'POST', headers, body: JSON.stringify({ game_id: currentIskjorerGameId, iskjorer: val })
+      });
+    }
+    if (!r.ok) throw new Error(await r.text());
+    closeIskjorerModal();
+    await fetchResults();
+    showToast('Iskjører lagret ✓');
+  } catch(e) {
+    showToast('Feil: ' + e.message, true);
   }
-  draw();
-  setTimeout(stopConfetti, 6000);
-}
-
-function stopConfetti() {
-  if (confettiAnim) cancelAnimationFrame(confettiAnim);
-  const canvas = document.getElementById('confetti-canvas');
-  canvas.classList.remove('active');
-  canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 // ── RESET ──
@@ -1375,7 +1155,6 @@ async function resetAll() {
     if (!r.ok) throw new Error(await r.text());
     document.getElementById('reset-confirm').classList.remove('visible');
     document.getElementById('reset-input').value = '';
-    celebrationShown = false;
     await fetchResults();
     showToast('Alle resultater slettet');
   } catch(e) {
