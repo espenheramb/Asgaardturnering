@@ -723,7 +723,7 @@
       <button onclick="showView('format', this)">Format</button>
       <button id="pin-btn" onclick="togglePinLock()" title="Lås/lås opp redigering" style="font-size:1rem;padding:6px 10px;">🔒</button>
     </nav>
-    <span style="font-size:0.65rem;color:var(--border);font-family:'Oswald',sans-serif;letter-spacing:0.06em;position:absolute;bottom:4px;right:1.5rem;">v1.3</span>
+    <span style="font-size:0.65rem;color:var(--border);font-family:'Oswald',sans-serif;letter-spacing:0.06em;position:absolute;bottom:4px;right:1.5rem;">v1.4</span>
   </div>
 </header>
 
@@ -832,6 +832,10 @@
     </div>
     <div class="officials-section">
       <div class="officials-label">Funksjonærer</div>
+      <div class="official-row">
+        <span class="official-key">Sekretariat</span>
+        <input class="official-input" type="text" id="input-sec" placeholder="Navn" style="font-size:1rem;">
+      </div>
       <div class="official-row">
         <span class="official-key">Dommer(e)</span>
         <input class="official-input" type="text" id="input-referee" placeholder="Navn(ene)">
@@ -998,7 +1002,8 @@ function renderGames(containerId, games) {
     const teamsEl  = g.title
       ? `<span class="game-teams"><strong>${g.title}</strong> <span style="color:var(--muted);font-size:0.85rem">${g.home} – ${g.away}</span></span>`
       : `<span class="game-teams">${g.home} <span style="color:var(--muted);font-weight:300">–</span> ${g.away}</span>`;
-    const secEl    = g.sec ? `<span class="game-sec"><span>sek.</span>${g.sec}</span>` : `<span class="game-sec"></span>`;
+    const displaySec = res?.sec || g.sec;
+    const secEl    = displaySec ? `<span class="game-sec"><span>sek.</span>${displaySec}</span>` : `<span class="game-sec"></span>`;
 
     let resultEl;
     if (hasResult) {
@@ -1253,6 +1258,9 @@ function openModal(gameId) {
 
   document.getElementById('input-referee').value = res?.referee ?? '';
   document.getElementById('input-iskjorer').value = res?.iskjorer ?? '';
+  document.getElementById('input-sec').value = res?.sec ?? '';
+  const secInput = document.getElementById('input-sec');
+  secInput.placeholder = g.sec ? `Forslag: ${g.sec}` : 'Navn';
   // Show suggested iskjorer as placeholder
   const iskInput = document.getElementById('input-iskjorer');
   iskInput.placeholder = g.iskjorer ? `Forslag: ${g.iskjorer}` : 'Navn på iskjører';
@@ -1314,6 +1322,7 @@ async function saveResult() {
     shootout_winner: shootout ? shootoutWinner : null,
     referee: document.getElementById('input-referee').value.trim() || null,
     iskjorer: document.getElementById('input-iskjorer').value.trim() || null,
+    sec: document.getElementById('input-sec').value.trim() || null,
     updated_at: new Date().toISOString()
   };
 
