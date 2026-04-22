@@ -167,12 +167,13 @@
   }
 
   .officials-row {
-    padding: 4px 14px 6px;
+    padding: 2px 14px 4px;
     font-size: 0.78rem;
     color: var(--text);
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+    align-items: center;
   }
   .officials-row-key {
     font-family: 'Oswald', sans-serif;
@@ -186,8 +187,8 @@
   .officials-row-sep { color: var(--border); }
 
   .resurface-row {
-    padding: 5px 14px;
-    font-size: 0.75rem;
+    padding: 7px 14px;
+    font-size: 0.85rem;
     color: var(--muted);
     font-style: italic;
     letter-spacing: 0.01em;
@@ -202,7 +203,7 @@
   .resurface-row:hover { background: var(--card); }
   .iskjorer-btn {
     font-style: normal;
-    font-size: 0.72rem;
+    font-size: 0.8rem;
     color: var(--muted);
     font-family: 'Oswald', sans-serif;
     font-weight: 500;
@@ -210,18 +211,24 @@
     white-space: nowrap;
     border: 1px dashed var(--border);
     border-radius: 4px;
-    padding: 2px 8px;
+    padding: 3px 10px;
     transition: color 0.15s, border-color 0.15s;
   }
   .resurface-row:hover .iskjorer-btn { color: var(--accent); border-color: var(--accent); }
   .iskjorer-tag {
     font-style: normal;
-    font-size: 0.72rem;
+    font-size: 0.85rem;
     color: var(--text);
     font-family: 'Oswald', sans-serif;
     font-weight: 500;
     letter-spacing: 0.04em;
     white-space: nowrap;
+  }
+  .iskjorer-tag::before {
+    content: 'Iskjører: ';
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 0.78rem;
   }
 
   .officials-section {
@@ -981,15 +988,7 @@ function renderGames(containerId, games) {
     row.innerHTML = timeEl + numEl + teamsEl + secEl + resultEl;
     el.appendChild(row);
 
-    // Show referee and iskjorer if registered
-    if (res && (res.referee || res.iskjorer)) {
-      const infoRow = document.createElement('div');
-      infoRow.className = 'officials-row';
-      const refPart = res.referee ? `<span><span class="officials-row-key">dommer</span> ${res.referee}</span>` : '';
-      const iskPart = res.iskjorer ? `<span><span class="officials-row-key">iskjører</span> ${res.iskjorer}</span>` : '';
-      infoRow.innerHTML = [refPart, iskPart].filter(Boolean).join('<span class="officials-row-sep">·</span>');
-      el.appendChild(infoRow);
-    }
+    // iskjorer is shown on the resurface row below, not here
 
     if (g.resurface) {
       const resRow = document.createElement('div');
