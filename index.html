@@ -1154,6 +1154,7 @@ function submitPin() {
   const val = document.getElementById('pin-input').value;
   if (val === PIN) {
     pinUnlocked = true;
+    document.getElementById('pin-btn').textContent = '🔓';
     document.getElementById('pin-overlay').classList.remove('open');
     if (pendingAction) { pendingAction(); pendingAction = null; }
   } else {
@@ -1163,25 +1164,20 @@ function submitPin() {
   }
 }
 
+function closePinModal() {
+  document.getElementById('pin-overlay').classList.remove('open');
+  pendingAction = null;
+}
+
 function togglePinLock() {
   if (pinUnlocked) {
     pinUnlocked = false;
     document.getElementById('pin-btn').textContent = '🔒';
     showToast('Redigering låst');
   } else {
-    requirePin(() => {
-      document.getElementById('pin-btn').textContent = '🔓';
-      showToast('Redigering låst opp');
-    });
+    requirePin(() => showToast('Redigering låst opp'));
   }
 }
-
-// Update lock icon when pin is unlocked
-const _origSubmitPin = submitPin;
-submitPin = function() {
-  _origSubmitPin();
-  if (pinUnlocked) document.getElementById('pin-btn').textContent = '🔓';
-};
 
 document.getElementById('pin-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') submitPin();
