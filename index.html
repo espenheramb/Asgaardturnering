@@ -723,7 +723,7 @@
       <button onclick="showView('format', this)">Format</button>
       <button id="pin-btn" onclick="togglePinLock()" title="Lås/lås opp redigering" style="font-size:1rem;padding:6px 10px;">🔒</button>
     </nav>
-    <span style="font-size:0.65rem;color:var(--border);font-family:'Oswald',sans-serif;letter-spacing:0.06em;position:absolute;bottom:4px;right:1.5rem;">v1.0</span>
+    <span style="font-size:0.65rem;color:var(--border);font-family:'Oswald',sans-serif;letter-spacing:0.06em;position:absolute;bottom:4px;right:1.5rem;">v1.2</span>
   </div>
 </header>
 
@@ -951,6 +951,7 @@ let currentGameId = null;
 
 // ── FETCH RESULTS ──
 async function fetchResults() {
+  if (anyModalOpen()) return;
   try {
     const r = await fetch(`${SUPABASE_URL}/rest/v1/results?select=*`, { headers });
     const data = await r.json();
@@ -987,7 +988,8 @@ function renderGames(containerId, games) {
     row.className = 'game-row' + (hasResult ? ' has-result' : '') +
                     (g.type === 'gold' ? ' is-final' : '') +
                     (g.type === 'bronze' ? ' is-bronze' : '');
-    row.onclick = () => requirePin(() => openModal(g.id));
+    row.dataset.gameId = g.id;
+    row.onclick = () => requirePin(() => openModal(parseInt(row.dataset.gameId)));
 
     const timeEl   = `<span class="game-time">${g.time}</span>`;
     const numEl    = `<span class="game-num">${g.id}</span>`;
@@ -1017,7 +1019,8 @@ function renderGames(containerId, games) {
         ? `<span class="iskjorer-tag">${storedIsk}</span>`
         : `<span class="iskjorer-btn">+ iskjører</span>`;
       resRow.innerHTML = `<span>↳ islegging (~15 min)</span>${iskBtn}`;
-      resRow.onclick = (e) => { e.stopPropagation(); requirePin(() => openModal(g.id)); };
+      resRow.dataset.gameId = g.id;
+      resRow.onclick = (e) => { e.stopPropagation(); requirePin(() => openModal(parseInt(resRow.dataset.gameId))); };
       el.appendChild(resRow);
     }
   });
@@ -1143,6 +1146,8 @@ const PIN = '2026';
 let pinUnlocked = false;
 let pendingAction = null;
 
+let pendingGameId = null;
+
 function requirePin(action) {
   if (pinUnlocked) { action(); return; }
   pendingAction = action;
@@ -1150,6 +1155,12 @@ function requirePin(action) {
   document.getElementById('pin-error').textContent = '';
   document.getElementById('pin-overlay').classList.add('open');
   document.getElementById('pin-input').focus();
+}
+
+// Pause auto-refresh while any modal is open to avoid re-render killing pendingAction
+function anyModalOpen() {
+  return ['modal-overlay','pin-overlay','pre-iskjorer-overlay','celebration-overlay']
+    .some(id => document.getElementById(id)?.classList.contains('open'));
 }
 
 function submitPin() {
