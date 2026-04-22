@@ -56,6 +56,7 @@
     align-items: center;
     justify-content: space-between;
     height: 56px;
+    position: relative;
   }
   .site-title {
     font-family: 'Oswald', sans-serif;
@@ -722,6 +723,7 @@
       <button onclick="showView('format', this)">Format</button>
       <button id="pin-btn" onclick="togglePinLock()" title="Lås/lås opp redigering" style="font-size:1rem;padding:6px 10px;">🔒</button>
     </nav>
+    <span style="font-size:0.65rem;color:var(--border);font-family:'Oswald',sans-serif;letter-spacing:0.06em;position:absolute;bottom:4px;right:1.5rem;">v1.0</span>
   </div>
 </header>
 
@@ -852,9 +854,9 @@
   <div class="modal" style="max-width:320px;text-align:center;">
     <div class="modal-title">Skriv inn PIN</div>
     <div class="modal-match" style="margin-bottom:1.25rem;">Kun for lagledere og funksjonærer</div>
-    <input class="official-input" type="number" id="pin-input" placeholder="••••"
+    <input class="official-input" type="text" id="pin-input" placeholder="••••"
       style="font-size:2rem;text-align:center;letter-spacing:0.3em;margin-bottom:1rem;"
-      inputmode="numeric" maxlength="4" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)">
+      inputmode="numeric" maxlength="4">
     <div id="pin-error" style="color:var(--danger);font-size:0.8rem;margin-bottom:0.75rem;min-height:1.2rem;"></div>
     <div class="modal-actions" style="justify-content:center;">
       <button class="btn btn-ghost" onclick="closePinModal()">Avbryt</button>
@@ -1152,7 +1154,7 @@ function requirePin(action) {
 
 function submitPin() {
   const val = document.getElementById('pin-input').value;
-  if (val === PIN) {
+  if (val.toString() === PIN) {
     pinUnlocked = true;
     document.getElementById('pin-btn').textContent = '🔓';
     document.getElementById('pin-overlay').classList.remove('open');
